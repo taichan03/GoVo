@@ -2,13 +2,32 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
-import { Article, Brand, Cta } from "./components";
+import { Brand, Cta, Navbar } from "./components";
+import {
+  Footer,
+  Blog,
+  Possibility,
+  Features,
+  WhatGPT3,
+  Header,
+} from "./containers";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <div className="App">
+      <div className="gradient_bg">
+        <Navbar />
+        <header />
+      </div>
+      <Brand />
+      <WhatGPT3 />
+      <Features />
+      <Possibility />
+      <Cta />
+      <Blog />
+      <Footer />
       <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
