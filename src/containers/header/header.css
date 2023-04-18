@@ -1,6 +1,9 @@
 .gpt3__header {
     display: flex;
     flex-direction: row;
+    width: 60%;
+    margin: auto;
+
 }
 
 .gpt3__header-content {
@@ -9,8 +12,8 @@
     justify-content: center;
     align-items: flex-start;
     flex-direction: column;
-
     margin-right: 5rem;
+    text-align: center;
 }
 
 .gpt3__header-content h1 {
