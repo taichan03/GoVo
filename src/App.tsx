@@ -1,18 +1,28 @@
-import React from "react";
-
-import { Features, Header } from "./containers";
+import React, { useState } from "react";
+import { Footer, Features, WhatGPT3, Header } from "./containers";
 import { Navbar } from "./components";
-
 import "./App.css";
 
-const App = () => (
-  <div className="App">
-    <div className="gradient__bg">
-      <Navbar />
-      <Header />
+const App = () => {
+  const [zipCode, setZipCode] = useState("");
+  const [chatVisible, setChatVisible] = useState(false);
+
+  const handleZipCodeSubmit = (zipCode) => {
+    setZipCode(zipCode);
+    setChatVisible(true);
+  };
+
+  return (
+    <div className="App">
+      <div className={`gradient__bg ${chatVisible ? "chat-visible" : ""}`}>
+        <Navbar />
+        {chatVisible && <WhatGPT3 zipCode={zipCode} />}
+        <Header onZipCodeSubmit={handleZipCodeSubmit} />
+      </div>
+      <Features className={chatVisible ? "chat-visible" : ""} />
+      <Footer />
     </div>
-    <Features />
-  </div>
-);
+  );
+};
 
 export default App;
