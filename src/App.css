@@ -35,12 +35,24 @@ a{
   transition: all 0.5s ease-in-out;
 }
 
-.chat-visible .gradient__bg {
+.Header {
+  transition: all 0.5s ease-in-out;
+}
+
+.Footer {
+  transition: all 0.5s ease-in-out;
+}
+
+.chat-visible .Header {
   transform: translateY(-100px);
 }
 
 .chat-visible .Features {
-  transform: translateY(100px);
+  transform: translateY(1000px);
+}
+
+.chat-visible .Footer {
+  transform: translateY(1000px);
 }
 
 .gradient__text {

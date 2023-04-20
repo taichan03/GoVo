@@ -9,9 +9,10 @@ const App = () => {
 
   const handleZipCodeSubmit = (zipCode) => {
     setZipCode(zipCode);
-    setChatVisible(true);
+    setTimeout(() => {
+      setChatVisible(true);
+    }, 500);
   };
-
   return (
     <div className="App">
       <div className={`gradient__bg ${chatVisible ? "chat-visible" : ""}`}>
@@ -19,8 +20,12 @@ const App = () => {
         {chatVisible && <WhatGPT3 zipCode={zipCode} />}
         <Header onZipCodeSubmit={handleZipCodeSubmit} />
       </div>
-      <Features className={chatVisible ? "chat-visible" : ""} />
-      <Footer />
+      <div className={`Features ${chatVisible ? "chat-visible" : ""}`}>
+        <Features />
+      </div>
+      <div className={`Footer ${chatVisible ? "chat-visible" : ""}`}>
+        <Footer />
+      </div>
     </div>
   );
 };

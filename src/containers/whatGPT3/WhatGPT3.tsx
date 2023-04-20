@@ -106,11 +106,19 @@ function WhatGPT3() {
 
   return (
     <>
-      <div className="body">
-        <center>
-          <MainContainer className="my-custom-main-container">
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "50vh",
+        }}
+      >
+        <div style={{ position: "relative", height: "500px", width: "700px" }}>
+          <MainContainer>
             <ChatContainer className="ChatContainer">
               <MessageList
+                className="ChatContainer"
                 typingIndicator={
                   isTyping ? (
                     <TypingIndicator content="ChatGPT is typing" />
@@ -127,7 +135,7 @@ function WhatGPT3() {
               />
             </ChatContainer>
           </MainContainer>
-        </center>
+        </div>
       </div>
     </>
   );

@@ -1,9 +1,4 @@
-.body {
-    position: "relative";
-    height: "500px";
-    width: "700px";
-  }
-  
+
   .ChatContainer {
     margin: auto;
     width: 100%;
@@ -19,5 +14,4 @@
     width: 100%;
     height: 100%;
     max-width: 1000px;
-    max-height: 1000px;
   }
