@@ -99,44 +99,36 @@ function WhatGPT3() {
       });
   }
 
-  let items = ["Mark", "Tai", "Alex"];
-  const handleSelectItem = (item: string) => {
-    console.log(item);
-  };
-
   return (
     <>
-      <div
+      {/* <div
         style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           height: "50vh",
         }}
-      >
-        <div style={{ position: "relative", height: "500px", width: "700px" }}>
-          <MainContainer>
-            <ChatContainer className="ChatContainer">
-              <MessageList
-                className="ChatContainer"
-                typingIndicator={
-                  isTyping ? (
-                    <TypingIndicator content="ChatGPT is typing" />
-                  ) : null
-                }
-              >
-                {messages.map((message, i) => {
-                  return <Message key={i} model={message} />;
-                })}
-              </MessageList>
-              <MessageInput
-                placeholder="Type message Here"
-                onSend={handleSend}
-              />
-            </ChatContainer>
-          </MainContainer>
-        </div>
+      > */}
+      <div className="Body">
+        {/* <div> */}
+        <MainContainer className="ChatContainer">
+          <ChatContainer>
+            <MessageList
+              typingIndicator={
+                isTyping ? (
+                  <TypingIndicator content="ChatGPT is typing" />
+                ) : null
+              }
+            >
+              {messages.map((message, i) => {
+                return <Message key={i} model={message} />;
+              })}
+            </MessageList>
+            <MessageInput placeholder="Type message Here" onSend={handleSend} />
+          </ChatContainer>
+        </MainContainer>
       </div>
+      {/* </div> */}
     </>
   );
 }
