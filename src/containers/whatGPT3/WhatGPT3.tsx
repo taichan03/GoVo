@@ -20,10 +20,10 @@ const systemMessage = {
     "Explain things like you're talking to a software professional with 2 years of experience.",
 };
 
-function WhatGPT3() {
+function WhatGPT3({ zipCode }) {
   const [messages, setMessages] = useState([
     {
-      message: "Hello, this is GoVo. How can I help you?",
+      message: `Hello, this is GoVo. How can I help you? ${zipCode}`,
       sentTime: "just now",
       sender: "GoVo",
     },
