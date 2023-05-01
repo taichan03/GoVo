@@ -17,7 +17,7 @@ const systemMessage = {
   //  Explain things like you're talking to a software professional with 5 years of experience.
   role: "system",
   content:
-    "Explain things like you're talking to a software professional with 2 years of experience.",
+    "Create a voting plan based on the following zip code, and list each candidate party affiliation: ${zipCode}",
 };
 
 function WhatGPT3({ zipCode }) {

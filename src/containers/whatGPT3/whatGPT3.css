@@ -12,6 +12,7 @@
     height: 100%;
     max-width: 1000px;
     max-height: 5000px;
+    overflow: auto;
   }
   
   /* .my-custom-main-container {
