@@ -10,6 +10,8 @@ import {
   MessageInput,
   TypingIndicator,
 } from "@chatscope/chat-ui-kit-react";
+import { useEffect } from "react";
+
 
 const API_KEY = "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";
 
@@ -17,19 +19,37 @@ const systemMessage = {
   //  Explain things like you're talking to a software professional with 5 years of experience.
   role: "system",
   content:
-    "Create a voting plan based on the following zip code, and list each candidate party affiliation: ${zipCode}",
+    "Create a voting plan based on the following zip code, and list each candidate party affiliation based on the zipcode.",
 };
 
 function WhatGPT3({ zipCode }) {
   const [messages, setMessages] = useState([
     {
-      message: `Hello, this is GoVo. How can I help you? ${zipCode}`,
+      message: `Hello, this is GoVo.`,
       sentTime: "just now",
       sender: "GoVo",
     },
   ]);
 
   const [isTyping, setIsTyping] = useState(false);
+
+  useEffect(() => {
+    const sendMessageToChatGPT = async () => {
+      const newMessage = {
+        message: `I live in ${zipCode}.`,
+        direction: "outgoing",
+        sender: "user",
+      };
+
+      const newMessages = [...messages, newMessage];
+      setMessages(newMessages);
+
+      setIsTyping(true);
+      await processMessageToChatGPT(newMessages);
+    };
+
+    sendMessageToChatGPT();
+  }, [zipCode]);
 
   const handleSend = async (message) => {
     const newMessage = {
