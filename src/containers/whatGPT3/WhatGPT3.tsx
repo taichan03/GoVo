@@ -19,7 +19,7 @@ const systemMessage = {
   //  Explain things like you're talking to a software professional with 5 years of experience.
   role: "system",
   content:
-    "Create a voting plan based on the following zip code, and list each candidate party affiliation based on the zipcode.",
+    "Create a voting plan based on the following zip code, and list each candidate party affiliation: {zipcode}",
 };
 
 function WhatGPT3({ zipCode }) {
@@ -36,7 +36,7 @@ function WhatGPT3({ zipCode }) {
   useEffect(() => {
     const sendMessageToChatGPT = async () => {
       const newMessage = {
-        message: `I live in ${zipCode}.`,
+        message: `My zipcode is ${zipCode}.`,
         direction: "outgoing",
         sender: "user",
       };
@@ -121,19 +121,11 @@ function WhatGPT3({ zipCode }) {
 
   return (
     <>
-      {/* <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "50vh",
-        }}
-      > */}
-      <div className="Body">
-        {/* <div> */}
+       <div className="Body">
         <MainContainer className="ChatContainer">
           <ChatContainer>
             <MessageList
+            scrollBehavior='smooth'
               typingIndicator={
                 isTyping ? (
                   <TypingIndicator content="ChatGPT is typing" />
@@ -148,7 +140,6 @@ function WhatGPT3({ zipCode }) {
           </ChatContainer>
         </MainContainer>
       </div>
-      {/* </div> */}
     </>
   );
 }
