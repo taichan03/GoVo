@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Footer, Features, WhatGPT3, Header } from "./containers";
+import { Features, WhatGPT3, Header } from "./containers";
 import { Navbar } from "./components";
 import "./App.css";
 
