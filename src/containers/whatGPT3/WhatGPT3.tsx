@@ -12,8 +12,7 @@ import {
 } from "@chatscope/chat-ui-kit-react";
 import { useEffect } from "react";
 
-
-const API_KEY = "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";
+const API_KEY = "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";
 
 const systemMessage = {
   //  Explain things like you're talking to a software professional with 5 years of experience.
@@ -23,13 +22,7 @@ const systemMessage = {
 };
 
 function WhatGPT3({ zipCode }) {
-  const [messages, setMessages] = useState([
-    {
-      message: `Hello, this is GoVo.`,
-      sentTime: "just now",
-      sender: "GoVo",
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
 
   const [isTyping, setIsTyping] = useState(false);
 
@@ -121,11 +114,11 @@ function WhatGPT3({ zipCode }) {
 
   return (
     <>
-       <div className="Body">
+      <div className="Body">
         <MainContainer className="ChatContainer">
           <ChatContainer>
             <MessageList
-            scrollBehavior='smooth'
+              scrollBehavior="smooth"
               typingIndicator={
                 isTyping ? (
                   <TypingIndicator content="ChatGPT is typing" />

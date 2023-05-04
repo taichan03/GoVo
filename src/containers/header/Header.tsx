@@ -9,6 +9,7 @@ const Header = ({ onZipCodeSubmit }) => {
 
   const handleZipCodeSubmit = () => {
     onZipCodeSubmit(zipCode);
+    setZipCode("");
     setShowChatButton(false);
   };
 
