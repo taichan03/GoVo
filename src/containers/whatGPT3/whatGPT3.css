@@ -1,11 +1,12 @@
 
   .Body{
     position: relative; 
-    maxHeight: 700px;
     width: 700px;
     left: 30%;
 
   }
+
+  
   
   /* .ChatContainer {
     margin: auto;

@@ -3,7 +3,10 @@ import "./header.css";
 import people from "../../assets/people.png";
 import ai from "../../assets/ai.png";
 
-const Header = ({ onZipCodeSubmit }) => {
+interface HeaderProps {
+  onZipCodeSubmit: (zipCode: string) => void;
+}
+const Header = ({ onZipCodeSubmit }: HeaderProps) => {
   const [zipCode, setZipCode] = useState("");
   const [showChatButton, setShowChatButton] = useState(true);
 

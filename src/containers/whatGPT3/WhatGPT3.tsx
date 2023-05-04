@@ -26,11 +26,11 @@ interface WhatGPT3Props {
 }
 
 function WhatGPT3({ zipCode }: WhatGPT3Props) {
-  type Message = {
+  interface Message {
     message: string;
-    direction: string;
     sender: string;
-  };
+    position?: "single" | "first" | "normal" | "last" | 0 | 1 | 2 | 3;
+  }
 
   const [messages, setMessages] = useState<Message[]>([]);
 
@@ -116,7 +116,6 @@ function WhatGPT3({ zipCode }: WhatGPT3Props) {
           {
             message: data.choices[0].message.content,
             sender: "ChatGPT",
-            direction: "incoming",
           },
         ]);
         setIsTyping(false);
@@ -137,7 +136,17 @@ function WhatGPT3({ zipCode }: WhatGPT3Props) {
               }
             >
               {messages.map((message, i) => {
-                return <Message key={i} model={message} />;
+                return (
+                  <Message
+                    key={i}
+                    model={{
+                      ...message,
+                      direction:
+                        message.sender === "user" ? "outgoing" : "incoming",
+                      position: i === messages.length - 1 ? "last" : "normal",
+                    }}
+                  />
+                );
               })}
             </MessageList>
             <MessageInput placeholder="Type message Here" onSend={handleSend} />

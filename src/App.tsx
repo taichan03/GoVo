@@ -7,7 +7,7 @@ const App = () => {
   const [zipCode, setZipCode] = useState("");
   const [chatVisible, setChatVisible] = useState(false);
 
-  const handleZipCodeSubmit = (zipCode) => {
+  const handleZipCodeSubmit = (zipCode: string) => {
     setZipCode(zipCode);
     setTimeout(() => {
       setChatVisible(true);
