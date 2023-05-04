@@ -21,8 +21,18 @@ const systemMessage = {
     "Create a voting plan based on the following zip code, and list each candidate party affiliation: {zipcode}",
 };
 
-function WhatGPT3({ zipCode }) {
-  const [messages, setMessages] = useState([]);
+interface WhatGPT3Props {
+  zipCode: string;
+}
+
+function WhatGPT3({ zipCode }: WhatGPT3Props) {
+  type Message = {
+    message: string;
+    direction: string;
+    sender: string;
+  };
+
+  const [messages, setMessages] = useState<Message[]>([]);
 
   const [isTyping, setIsTyping] = useState(false);
 
@@ -44,7 +54,7 @@ function WhatGPT3({ zipCode }) {
     sendMessageToChatGPT();
   }, [zipCode]);
 
-  const handleSend = async (message) => {
+  const handleSend = async (message: string) => {
     const newMessage = {
       message,
       direction: "outgoing",
@@ -61,7 +71,7 @@ function WhatGPT3({ zipCode }) {
     await processMessageToChatGPT(newMessages);
   };
 
-  async function processMessageToChatGPT(chatMessages) {
+  async function processMessageToChatGPT(chatMessages: Message[]) {
     // messages is an array of messages
     // Format messages for chatGPT API
     // API is expecting objects in format of { role: "user" or "assistant", "content": "message here"}
@@ -106,6 +116,7 @@ function WhatGPT3({ zipCode }) {
           {
             message: data.choices[0].message.content,
             sender: "ChatGPT",
+            direction: "incoming",
           },
         ]);
         setIsTyping(false);
