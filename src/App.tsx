@@ -23,9 +23,7 @@ const App = () => {
       <div className={`Features ${chatVisible ? "chat-visible" : ""}`}>
         <Features />
       </div>
-      <div className={`Footer ${chatVisible ? "chat-visible" : ""}`}>
-        <Footer />
-      </div>
+      <div className={`Footer ${chatVisible ? "chat-visible" : ""}`}></div>
     </div>
   );
 };
