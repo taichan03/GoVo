@@ -12,8 +12,6 @@ import {
 } from "@chatscope/chat-ui-kit-react";
 import { useEffect } from "react";
 
-const API_KEY = "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";
-
 const systemMessage = {
   //  Explain things like you're talking to a software professional with 5 years of experience.
   role: "system",
@@ -45,7 +43,7 @@ function WhatGPT3({
   useEffect(() => {
     const sendMessageToChatGPT = async () => {
       const newMessage = {
-        message: `My zipcode is ${zipCode}. My API key is ${apiKey}`,
+        message: `My zipcode is ${zipCode}.`,
         direction: "outgoing",
         sender: "user",
       };
@@ -63,7 +61,7 @@ function WhatGPT3({
   const handleSend = async (message: string) => {
     if (zipCode && apiKey) {
       const newMessage = {
-        message: `My zipcode is ${zipCode}. My API key is ${apiKey}`,
+        message: `My zipcode is ${zipCode}.`,
         direction: "outgoing",
         sender: "user",
       };
