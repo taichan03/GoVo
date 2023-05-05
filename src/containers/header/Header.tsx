@@ -4,15 +4,18 @@ import people from "../../assets/people.png";
 import ai from "../../assets/ai.png";
 
 interface HeaderProps {
-  onZipCodeSubmit: (zipCode: string) => void;
+  onZipCodeAndAPIKeySubmit: (zipCode: string, apiKey: string) => void;
 }
-const Header = ({ onZipCodeSubmit }: HeaderProps) => {
+
+const Header = ({ onZipCodeAndAPIKeySubmit }: HeaderProps) => {
   const [zipCode, setZipCode] = useState("");
+  const [apiKey, setAPIKey] = useState("");
   const [showChatButton, setShowChatButton] = useState(true);
 
-  const handleZipCodeSubmit = () => {
-    onZipCodeSubmit(zipCode);
+  const handleSubmit = () => {
+    onZipCodeAndAPIKeySubmit(zipCode, apiKey);
     setZipCode("");
+    setAPIKey("");
     setShowChatButton(false);
   };
 
@@ -23,10 +26,10 @@ const Header = ({ onZipCodeSubmit }: HeaderProps) => {
           A non-partisan app to help you connect the dots
         </h1>
         <p>
-          Enter your zip code for a tailored voting plan for the your next
-          upcoming election. Remember, there can be up to 3 elections on any
-          given year and we encourage participation in your local elections for
-          maximum impact.
+          Enter your zip code and API key for a tailored voting plan for your
+          next upcoming election. Remember, there can be up to 3 elections on
+          any given year and we encourage participation in your local elections
+          for maximum impact.
         </p>
 
         <div className="gpt3__header-content__input">
@@ -36,8 +39,14 @@ const Header = ({ onZipCodeSubmit }: HeaderProps) => {
             value={zipCode}
             onChange={(e) => setZipCode(e.target.value)}
           />
-          <button type="button" onClick={handleZipCodeSubmit}>
-            Get Started
+          <input
+            type="text"
+            placeholder="Enter your API Key"
+            value={apiKey}
+            onChange={(e) => setAPIKey(e.target.value)}
+          />
+          <button type="button" onClick={handleSubmit}>
+            Submit
           </button>
         </div>
 

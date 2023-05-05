@@ -23,9 +23,11 @@ const systemMessage = {
 
 interface WhatGPT3Props {
   zipCode: string;
+  apiKey: string;
+  onZipCodeAndAPIKeySubmit: (zipCode: string, apiKey: string) => void;
 }
 
-function WhatGPT3({ zipCode }: WhatGPT3Props) {
+function WhatGPT3({ zipCode, apiKey }: WhatGPT3Props) {
   interface Message {
     message: string;
     sender: string;
@@ -39,7 +41,7 @@ function WhatGPT3({ zipCode }: WhatGPT3Props) {
   useEffect(() => {
     const sendMessageToChatGPT = async () => {
       const newMessage = {
-        message: `My zipcode is ${zipCode}.`,
+        message: `My zipcode is ${zipCode}. My API key is ${apiKey}`,
         direction: "outgoing",
         sender: "user",
       };
@@ -55,20 +57,26 @@ function WhatGPT3({ zipCode }: WhatGPT3Props) {
   }, [zipCode]);
 
   const handleSend = async (message: string) => {
-    const newMessage = {
-      message,
-      direction: "outgoing",
-      sender: "user",
-    };
+    if (zipCode && apiKey) {
+      const newMessage = {
+        message: `My zipcode is ${zipCode}. My API key is ${apiKey}`,
+        direction: "outgoing",
+        sender: "user",
+      };
 
-    const newMessages = [...messages, newMessage];
+      const newMessages = [...messages, newMessage];
 
-    setMessages(newMessages);
+      setMessages(newMessages);
 
-    // Initial system message to determine ChatGPT functionality
-    // How it responds, how it talks, etc.
-    setIsTyping(true);
-    await processMessageToChatGPT(newMessages);
+      // Initial system message to determine ChatGPT functionality
+      // How it responds, how it talks, etc.
+      setIsTyping(true);
+      await processMessageToChatGPT(newMessages);
+
+      onZipCodeAndAPIKeySubmit(zipCode, apiKey);
+    } else {
+      alert("Please enter both zip code and API key");
+    }
   };
 
   async function processMessageToChatGPT(chatMessages: Message[]) {
@@ -101,7 +109,7 @@ function WhatGPT3({ zipCode }: WhatGPT3Props) {
     await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + API_KEY,
+        Authorization: "Bearer " + apiKey,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(apiRequestBody),
