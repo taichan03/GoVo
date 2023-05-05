@@ -24,10 +24,14 @@ const systemMessage = {
 interface WhatGPT3Props {
   zipCode: string;
   apiKey: string;
-  onZipCodeAndAPIKeySubmit: (zipCode: string, apiKey: string) => void;
+  onZipCodeAndAPIKeySubmit?: (zipCode: string, apiKey: string) => void;
 }
 
-function WhatGPT3({ zipCode, apiKey }: WhatGPT3Props) {
+function WhatGPT3({
+  zipCode,
+  apiKey,
+  onZipCodeAndAPIKeySubmit,
+}: WhatGPT3Props) {
   interface Message {
     message: string;
     sender: string;
@@ -73,7 +77,9 @@ function WhatGPT3({ zipCode, apiKey }: WhatGPT3Props) {
       setIsTyping(true);
       await processMessageToChatGPT(newMessages);
 
-      onZipCodeAndAPIKeySubmit(zipCode, apiKey);
+      if (onZipCodeAndAPIKeySubmit) {
+        onZipCodeAndAPIKeySubmit(zipCode, apiKey);
+      }
     } else {
       alert("Please enter both zip code and API key");
     }
