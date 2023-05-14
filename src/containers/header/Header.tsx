@@ -49,29 +49,7 @@ const Header = ({ onZipCodeAndAPIKeySubmit }: HeaderProps) => {
             Submit
           </button>
         </div>
-
-        {/* {showChatButton && (
-          <button
-            type="button"
-            className="gpt3__header-chat-button"
-            onClick={() => setShowChatButton(false)}
-          >
-            Click here to start a chat
-          </button>
-        )} */}
-
-        {/* <div className="gpt3__header-content__people">
-          <img src={people} />
-          <p>1,600 people requested access a visit in last 24 hours</p>
-        </div> */}
       </div>
-
-      {/* <div className="gpt3__header-image">
-        <img src={ai} />
-      </div>
-      <div className="gpt3__header-image">
-        <img src={ai} />
-      </div> */}
     </div>
   );
 };
