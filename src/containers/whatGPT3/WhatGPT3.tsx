@@ -83,6 +83,23 @@ function WhatGPT3({
     }
   };
 
+  const handleSendMessage = async (message: string) => {
+    const newMessage = {
+      message: message,
+      direction: "outgoing",
+      sender: "user",
+    };
+
+    const newMessages = [...messages, newMessage];
+
+    setMessages(newMessages);
+
+    // Initial system message to determine ChatGPT functionality
+    // How it responds, how it talks, etc.
+    setIsTyping(true);
+    await processMessageToChatGPT(newMessages);
+  };
+
   async function processMessageToChatGPT(chatMessages: Message[]) {
     // messages is an array of messages
     // Format messages for chatGPT API
@@ -161,7 +178,10 @@ function WhatGPT3({
                 );
               })}
             </MessageList>
-            <MessageInput placeholder="Type message Here" onSend={handleSend} />
+            <MessageInput
+              placeholder="Type message Here"
+              onSend={handleSendMessage}
+            />
           </ChatContainer>
         </MainContainer>
       </div>
