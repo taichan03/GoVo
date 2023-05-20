@@ -36,10 +36,10 @@ function WhatGPT3({ zipCode, onZipCodeAndAPIKeySubmit }: WhatGPT3Props) {
   const [isTyping, setIsTyping] = useState(false);
 
   let hasSentMessage = false;
-  console.log("WhatGPT3");
+  // console.log("WhatGPT3");
 
   useEffect(() => {
-    console.log("useEffect");
+    // console.log("useEffect");
     if (zipCode !== "" && !hasSentMessage) {
       sendMessageToChatGPT();
       hasSentMessage = true;
@@ -52,7 +52,7 @@ function WhatGPT3({ zipCode, onZipCodeAndAPIKeySubmit }: WhatGPT3Props) {
       direction: "outgoing",
       sender: "user",
     };
-    console.log("sendMessageToChatGPT");
+    // console.log("sendMessageToChatGPT");
     const newMessages = [...messages, newMessage];
     setMessages(newMessages);
 
@@ -61,7 +61,7 @@ function WhatGPT3({ zipCode, onZipCodeAndAPIKeySubmit }: WhatGPT3Props) {
   };
 
   const handleSendMessage = async (message: string) => {
-    console.log("1");
+    // console.log("1");
     const newMessage = {
       message: message,
       direction: "outgoing",
@@ -119,7 +119,7 @@ function WhatGPT3({ zipCode, onZipCodeAndAPIKeySubmit }: WhatGPT3Props) {
         return data.json();
       })
       .then((data) => {
-        console.log("API Response:", data);
+        // console.log("API Response:", data);
 
         setMessages([
           ...chatMessages,
@@ -131,7 +131,7 @@ function WhatGPT3({ zipCode, onZipCodeAndAPIKeySubmit }: WhatGPT3Props) {
         setIsTyping(false);
       });
 
-    console.log("END", apiRequestBody);
+    // console.log("END", apiRequestBody);
   }
 
   return (

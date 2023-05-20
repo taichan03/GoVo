@@ -12,7 +12,7 @@ const Header = ({ onZipCodeAndAPIKeySubmit }: HeaderProps) => {
   const [showChatButton, setShowChatButton] = useState(true);
 
   const handleSubmit = () => {
-    console.log("25");
+    // console.log("25");
     onZipCodeAndAPIKeySubmit(zipCode);
     setShowChatButton(false);
   };
