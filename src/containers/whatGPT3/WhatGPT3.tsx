@@ -120,17 +120,19 @@ function WhatGPT3({
     // and the messages which we formatted above. We add a system message in the front to'
     // determine how we want chatGPT to act.
     const apiRequestBody = {
-      model: "gpt-3.5-turbo",
-      messages: [
+      // model: "gpt-3.5-turbo",
+      prompt: [
         systemMessage, // The system message DEFINES the logic of our chatGPT
         ...apiMessages, // The messages from our chat with ChatGPT
       ],
     };
 
-    await fetch("https://api.openai.com/v1/chat/completions", {
+    console.log("API Request Body:", apiRequestBody);
+
+    await fetch("http://localhost:5000/", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + apiKey,
+        // Authorization: "Bearer " + apiKey,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(apiRequestBody),
@@ -139,11 +141,11 @@ function WhatGPT3({
         return data.json();
       })
       .then((data) => {
-        console.log(data);
+        console.log("API Response:", data);
         setMessages([
           ...chatMessages,
           {
-            message: data.choices[0].message.content,
+            message: data.bot.content,
             sender: "ChatGPT",
           },
         ]);
