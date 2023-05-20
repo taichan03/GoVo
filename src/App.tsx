@@ -8,9 +8,8 @@ const App = () => {
   const [aipKey, setAPIKey] = useState("");
   const [chatVisible, setChatVisible] = useState(false);
 
-  const handleZipCodeAndAPIKeySubmit = (zipCode: string, apiKey: string) => {
+  const handleZipCodeAndAPIKeySubmit = (zipCode: string) => {
     setZipCode(zipCode);
-    setAPIKey(apiKey);
     setChatVisible(true);
   };
 
@@ -18,7 +17,7 @@ const App = () => {
     <div className="App">
       <div className={`gradient__bg ${chatVisible ? "chat-visible" : ""}`}>
         <Navbar />
-        {chatVisible && <WhatGPT3 zipCode={zipCode} apiKey={aipKey} />}
+        {chatVisible && <WhatGPT3 zipCode={zipCode} />}
         {!chatVisible && (
           <Header onZipCodeAndAPIKeySubmit={handleZipCodeAndAPIKeySubmit} />
         )}

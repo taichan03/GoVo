@@ -21,15 +21,10 @@ const systemMessage = {
 
 interface WhatGPT3Props {
   zipCode: string;
-  apiKey: string;
-  onZipCodeAndAPIKeySubmit?: (zipCode: string, apiKey: string) => void;
+  onZipCodeAndAPIKeySubmit?: (zipCode: string) => void;
 }
 
-function WhatGPT3({
-  zipCode,
-  apiKey,
-  onZipCodeAndAPIKeySubmit,
-}: WhatGPT3Props) {
+function WhatGPT3({ zipCode, onZipCodeAndAPIKeySubmit }: WhatGPT3Props) {
   interface Message {
     message: string;
     sender: string;
@@ -40,50 +35,33 @@ function WhatGPT3({
 
   const [isTyping, setIsTyping] = useState(false);
 
+  let hasSentMessage = false;
+  console.log("WhatGPT3");
+
   useEffect(() => {
-    const sendMessageToChatGPT = async () => {
-      const newMessage = {
-        message: `My zipcode is ${zipCode}.`,
-        direction: "outgoing",
-        sender: "user",
-      };
-
-      const newMessages = [...messages, newMessage];
-      setMessages(newMessages);
-
-      setIsTyping(true);
-      await processMessageToChatGPT(newMessages);
-    };
-
-    sendMessageToChatGPT();
-  }, [zipCode]);
-
-  const handleSend = async (message: string) => {
-    if (zipCode && apiKey) {
-      const newMessage = {
-        message: `My zipcode is ${zipCode}.`,
-        direction: "outgoing",
-        sender: "user",
-      };
-
-      const newMessages = [...messages, newMessage];
-
-      setMessages(newMessages);
-
-      // Initial system message to determine ChatGPT functionality
-      // How it responds, how it talks, etc.
-      setIsTyping(true);
-      await processMessageToChatGPT(newMessages);
-
-      if (onZipCodeAndAPIKeySubmit) {
-        onZipCodeAndAPIKeySubmit(zipCode, apiKey);
-      }
-    } else {
-      alert("Please enter both zip code and API key");
+    console.log("useEffect");
+    if (zipCode !== "" && !hasSentMessage) {
+      sendMessageToChatGPT();
+      hasSentMessage = true;
     }
+  }, [zipCode, hasSentMessage]);
+
+  const sendMessageToChatGPT = async () => {
+    const newMessage = {
+      message: `My zipcode is ${zipCode}.`,
+      direction: "outgoing",
+      sender: "user",
+    };
+    console.log("sendMessageToChatGPT");
+    const newMessages = [...messages, newMessage];
+    setMessages(newMessages);
+
+    setIsTyping(true);
+    await processMessageToChatGPT(newMessages);
   };
 
   const handleSendMessage = async (message: string) => {
+    console.log("1");
     const newMessage = {
       message: message,
       direction: "outgoing",
@@ -142,6 +120,7 @@ function WhatGPT3({
       })
       .then((data) => {
         console.log("API Response:", data);
+
         setMessages([
           ...chatMessages,
           {
@@ -151,6 +130,8 @@ function WhatGPT3({
         ]);
         setIsTyping(false);
       });
+
+    console.log("END", apiRequestBody);
   }
 
   return (

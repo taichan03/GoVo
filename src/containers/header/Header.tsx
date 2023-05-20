@@ -4,18 +4,16 @@ import people from "../../assets/people.png";
 import ai from "../../assets/ai.png";
 
 interface HeaderProps {
-  onZipCodeAndAPIKeySubmit: (zipCode: string, apiKey: string) => void;
+  onZipCodeAndAPIKeySubmit: (zipCode: string) => void;
 }
 
 const Header = ({ onZipCodeAndAPIKeySubmit }: HeaderProps) => {
   const [zipCode, setZipCode] = useState("");
-  const [apiKey, setAPIKey] = useState("");
   const [showChatButton, setShowChatButton] = useState(true);
 
   const handleSubmit = () => {
-    onZipCodeAndAPIKeySubmit(zipCode, apiKey);
-    setZipCode("");
-    setAPIKey("");
+    console.log("25");
+    onZipCodeAndAPIKeySubmit(zipCode);
     setShowChatButton(false);
   };
 
@@ -39,12 +37,12 @@ const Header = ({ onZipCodeAndAPIKeySubmit }: HeaderProps) => {
             value={zipCode}
             onChange={(e) => setZipCode(e.target.value)}
           />
-          <input
+          {/* <input
             type="text"
             placeholder="Enter your API Key"
             value={apiKey}
             onChange={(e) => setAPIKey(e.target.value)}
-          />
+          /> */}
           <button type="button" onClick={handleSubmit}>
             Submit
           </button>
