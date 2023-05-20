@@ -107,7 +107,7 @@ function WhatGPT3({ zipCode, onZipCodeAndAPIKeySubmit }: WhatGPT3Props) {
 
     console.log("API Request Body:", apiRequestBody);
 
-    await fetch("http://localhost:5000/", {
+    await fetch("https://chatbot4-m3bp.onrender.com/sixer", {
       method: "POST",
       headers: {
         // Authorization: "Bearer " + apiKey,
