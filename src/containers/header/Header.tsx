@@ -24,10 +24,10 @@ const Header = ({ onZipCodeAndAPIKeySubmit }: HeaderProps) => {
           A non-partisan app to help you connect the dots
         </h1>
         <p>
-          Enter your zip code and API key for a tailored voting plan for your
-          next upcoming election. Remember, there can be up to 3 elections on
-          any given year and we encourage participation in your local elections
-          for maximum impact.
+          Enter your zip code for a tailored voting plan for your next upcoming
+          election. Remember, there can be up to 3 elections on any given year
+          and we encourage participation in your local elections for maximum
+          impact.
         </p>
 
         <div className="gpt3__header-content__input">
