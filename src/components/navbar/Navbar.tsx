@@ -22,7 +22,7 @@ const NavBar = () => {
           <a href="#home">Home</a>
         </p>
         <p>
-          <a href="#wgpt3">DEMO</a>
+          <a href="#wgpt3">DEMfO</a>
         </p>
         <p>
           <a href="#possibility">Media</a>
