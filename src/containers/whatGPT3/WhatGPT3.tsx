@@ -136,37 +136,32 @@ function WhatGPT3({ zipCode, onZipCodeAndAPIKeySubmit }: WhatGPT3Props) {
 
   return (
     <>
-      <div className="Body">
-        <MainContainer className="ChatContainer">
-          <ChatContainer>
-            <MessageList
-              scrollBehavior="smooth"
-              typingIndicator={
-                isTyping ? (
-                  <TypingIndicator content="ChatGPT is typing" />
-                ) : null
-              }
-            >
-              {messages.map((message, i) => {
-                return (
-                  <Message
-                    key={i}
-                    model={{
-                      ...message,
-                      direction:
-                        message.sender === "user" ? "outgoing" : "incoming",
-                      position: i === messages.length - 1 ? "last" : "normal",
-                    }}
-                  />
-                );
-              })}
-            </MessageList>
-            <MessageInput
-              placeholder="Type message Here"
-              onSend={handleSendMessage}
-            />
-          </ChatContainer>
-        </MainContainer>
+      <div className="flex flex-center justify-center items-center">
+        <div className=" w-[50%] h-[500px] bg-slate-800  border-1bg-white   focus:outline-none ring-2 ring-black shadow-sm rounded-lg text-slate-400">
+          <div
+            id="chat_container"
+            className=" overflow-auto mx-auto w-full flex flex-col h-[90%] "
+          ></div>
+          <div className=" p-4 rounded-lg  dark:bg-slate-700 dark:ring-0 dark:text-slate-300 dark:highlight-white/5 ">
+            <form className="flex  items-center">
+              <div className="flex-grow ml-2">
+                <input
+                  type="text"
+                  className="pl-3 py-2 w-full  font-semibold ring-1 ring-black hover:bg-slate-800  focus:outline-none focus:ring-2 focus:ring-black-500 shadow-sm rounded-lg bg-slate-900   "
+                  placeholder="Talk to me..."
+                />
+              </div>
+              <div className="ml-5">
+                <button
+                  type="submit"
+                  className="  rounded-md  py-2.5 ring-1 ring-black bg-slate-900 px-3 py-1.5 text-sm font-semibold  text-slate-400 hover:bg-slate-800 "
+                >
+                  Send
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </>
   );
