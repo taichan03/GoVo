@@ -11,6 +11,7 @@ import {
   TypingIndicator,
 } from "@chatscope/chat-ui-kit-react";
 import { useEffect } from "react";
+import axios from "axios";
 
 const systemMessage = {
   //  Explain things like you're talking to a software professional with 5 years of experience.
@@ -24,7 +25,22 @@ interface WhatGPT3Props {
   onZipCodeAndAPIKeySubmit?: (zipCode: string) => void;
 }
 
-function WhatGPT3({ zipCode, onZipCodeAndAPIKeySubmit }: WhatGPT3Props) {
+interface ChatLogItem {
+  type: string;
+  message: string;
+}
+
+interface ChatDropDownProps {
+  showChat: boolean;
+  handleChat: () => void;
+}
+
+interface MergedProps extends ChatDropDownProps, WhatGPT3Props {}
+
+const WhatGPT3: React.FC<MergedProps> = ({
+  zipCode,
+  onZipCodeAndAPIKeySubmit,
+}) => {
   interface Message {
     message: string;
     sender: string;
@@ -32,139 +48,147 @@ function WhatGPT3({ zipCode, onZipCodeAndAPIKeySubmit }: WhatGPT3Props) {
   }
 
   const [messages, setMessages] = useState<Message[]>([]);
-
+  const [inputValue, setInputValue] = useState("");
+  const [chatLog, setChatLog] = useState<ChatLogItem[]>([]); // Specify the type as ChatLogItem[]
   const [isTyping, setIsTyping] = useState(false);
 
   let hasSentMessage = false;
-  // console.log("WhatGPT3");
 
   useEffect(() => {
-    // console.log("useEffect");
-    if (zipCode !== "" && !hasSentMessage) {
-      sendMessageToChatGPT();
-      hasSentMessage = true;
+    const chatContainer = document.getElementById("chat_container");
+    if (chatContainer) {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
     }
-  }, [zipCode, hasSentMessage]);
+  }, [chatLog]);
 
-  const sendMessageToChatGPT = async () => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
     const newMessage = {
-      message: `My zipcode is ${zipCode}.`,
-      direction: "outgoing",
-      sender: "user",
-    };
-    // console.log("sendMessageToChatGPT");
-    const newMessages = [...messages, newMessage];
-    setMessages(newMessages);
-
-    setIsTyping(true);
-    await processMessageToChatGPT(newMessages);
-  };
-
-  const handleSendMessage = async (message: string) => {
-    // console.log("1");
-    const newMessage = {
-      message: message,
-      direction: "outgoing",
-      sender: "user",
+      message: inputValue,
+      type: "user",
     };
 
-    const newMessages = [...messages, newMessage];
+    const newMessages = [...chatLog, newMessage];
 
-    setMessages(newMessages);
+    setChatLog(newMessages);
 
-    // Initial system message to determine ChatGPT functionality
-    // How it responds, how it talks, etc.
-    setIsTyping(true);
-    await processMessageToChatGPT(newMessages);
+    sendMessage(newMessages);
+
+    setInputValue("");
   };
+  const sendMessage = async (message: ChatLogItem[]) => {
+    const url = "http://localhost:5000/sixer/";
 
-  async function processMessageToChatGPT(chatMessages: Message[]) {
-    // messages is an array of messages
-    // Format messages for chatGPT API
-    // API is expecting objects in format of { role: "user" or "assistant", "content": "message here"}
-    // So we need to reformat
-
-    let apiMessages = chatMessages.map((messageObject) => {
-      let role = "";
-      if (messageObject.sender === "ChatGPT") {
-        role = "assistant";
-      } else {
-        role = "user";
-      }
+    const prompt = message.map((messageObject) => {
+      let role = messageObject.type === "user" ? "user" : "assistant";
       return { role: role, content: messageObject.message };
     });
-
-    // Get the request body set up with the model we plan to use
-    // and the messages which we formatted above. We add a system message in the front to'
-    // determine how we want chatGPT to act.
+    console.log(prompt);
     const apiRequestBody = {
-      // model: "gpt-3.5-turbo",
-      prompt: [
-        systemMessage, // The system message DEFINES the logic of our chatGPT
-        ...apiMessages, // The messages from our chat with ChatGPT
-      ],
+      prompt: prompt,
     };
+    console.log(apiRequestBody);
+    // setIsLoading(true);
 
-    console.log("API Request Body:", apiRequestBody);
-
-    await fetch("https://chatbot4-m3bp.onrender.com/sixer", {
-      method: "POST",
-      headers: {
-        // Authorization: "Bearer " + apiKey,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(apiRequestBody),
-    })
-      .then((data) => {
-        return data.json();
-      })
-      .then((data) => {
-        // console.log("API Response:", data);
-
-        setMessages([
-          ...chatMessages,
+    axios
+      .post(url, apiRequestBody)
+      .then((response) => {
+        console.log(response);
+        setChatLog((prevChatLog) => [
+          ...prevChatLog,
           {
-            message: data.bot.content,
-            sender: "ChatGPT",
+            type: "bot",
+            message: response.data.bot.content,
           },
         ]);
-        setIsTyping(false);
+        // setIsLoading(false);
+      })
+      .catch((error) => {
+        // setIsLoading(false);
+        console.log(error);
       });
-
-    // console.log("END", apiRequestBody);
-  }
+  };
 
   return (
     <>
       <div className="flex flex-center justify-center items-center">
-        <div className=" w-[50%] h-[500px] bg-slate-800  border-1bg-white   focus:outline-none ring-2 ring-black shadow-sm rounded-lg text-slate-400">
+        <div className=" w-[50%] h-[600px] bg-slate-800  border-1bg-white   focus:outline-none ring-2 ring-black shadow-sm rounded-lg text-slate-800">
           <div
             id="chat_container"
-            className=" overflow-auto mx-auto w-full flex flex-col h-[90%] "
-          ></div>
-          <div className=" p-4 rounded-lg  dark:bg-slate-700 dark:ring-0 dark:text-slate-300 dark:highlight-white/5 ">
-            <form className="flex  items-center">
-              <div className="flex-grow ml-2">
-                <input
-                  type="text"
-                  className="pl-3 py-2 w-full  font-semibold ring-1 ring-black hover:bg-slate-800  focus:outline-none focus:ring-2 focus:ring-black-500 shadow-sm rounded-lg bg-slate-900   "
-                  placeholder="Talk to me..."
-                />
-              </div>
-              <div className="ml-5">
-                <button
-                  type="submit"
-                  className="  rounded-md  py-2.5 ring-1 ring-black bg-slate-900 px-3 py-1.5 text-sm font-semibold  text-slate-400 hover:bg-slate-800 "
-                >
-                  Send
-                </button>
-              </div>
-            </form>
+            className=" overflow-auto mx-auto  flex flex-col h-full "
+          >
+            <div className="flex flex-col space-y-2 pb-44 p-5 flex-grow">
+              {chatLog.length === 0 ? (
+                <div className="custom-text">
+                  Welcome to GoVo! <br />
+                  <br />
+                  At GoVo, we are committed to empowering you to make informed
+                  decisions about the upcoming elections in your area. Our app
+                  is non-partisan and doesn't endorse any political party or
+                  candidate, ensuring that you receive an unbiased and
+                  personalized voting plan.
+                  <br />
+                  <br />
+                  Feel free to ask any questions or share your concerns, and
+                  we'll be here to provide you with the information and guidance
+                  you need. Let's work together to make a difference in the
+                  democratic process!
+                </div>
+              ) : (
+                chatLog.map((message, index) => (
+                  <div
+                    key={index}
+                    className={`flex ${
+                      message.type === "user" ? "justify-end" : "justify-start"
+                    }`}
+                  >
+                    <div
+                      className={`${
+                        message.type === "user"
+                          ? "bg-blue-200 text-black "
+                          : "text-black bg-gray-200 border-2 "
+                      }rounded-lg p-2 max-h-[100%] max-w-[500px]`}
+                    >
+                      {message.message}
+                    </div>
+                  </div>
+                ))
+              )}
+              {/* {isLoading && (
+                <div key={chatLog.length} className="flex justify-between">
+                  <div className="rounded-lg p-4 text-white max-w-sm">
+                    <TypingAnimation />
+                  </div>
+                </div>
+              )} */}
+            </div>
+            <div className="  p-4 rounded-lg  dark:bg-slate-700 dark:ring-0 dark:text-slate-300 dark:highlight-white/5 ">
+              <form onSubmit={handleSubmit} className="flex  items-center">
+                <div className="flex-grow ml-2">
+                  <input
+                    type="text"
+                    className="pl-3 py-2 w-full  font-semibold ring-1 ring-black hover:bg-slate-800  focus:outline-none focus:ring-2 focus:ring-black-500 shadow-sm rounded-lg bg-slate-900   "
+                    placeholder="Talk to me..."
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                  />
+                </div>
+                <div className="ml-5">
+                  <button
+                    type="submit"
+                    className="  rounded-md  py-2.5 ring-1 ring-black bg-slate-900 px-3 py-1.5 text-sm font-semibold  text-slate-400 hover:bg-slate-800 "
+                  >
+                    Send
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
     </>
   );
-}
+};
 
 export default WhatGPT3;
