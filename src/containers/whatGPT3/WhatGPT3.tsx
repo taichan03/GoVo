@@ -2,16 +2,9 @@ import React from "react";
 import { useState } from "react";
 import "./whatGPT3.css";
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
-import {
-  MainContainer,
-  ChatContainer,
-  MessageList,
-  Message,
-  MessageInput,
-  TypingIndicator,
-} from "@chatscope/chat-ui-kit-react";
 import { useEffect } from "react";
 import axios from "axios";
+import TypingAnimation from "./TypingAnimation";
 
 const systemMessage = {
   //  Explain things like you're talking to a software professional with 5 years of experience.
@@ -74,6 +67,7 @@ const WhatGPT3: React.FC<MergedProps> = ({ zipCode }) => {
       let role = messageObject.type === "user" ? "user" : "assistant";
       return { role: role, content: messageObject.message };
     });
+
     console.log(prompt);
     const apiRequestBody = {
       prompt: prompt,
@@ -101,7 +95,7 @@ const WhatGPT3: React.FC<MergedProps> = ({ zipCode }) => {
   };
   const sendZipMessage = async (message: ChatLogItem[], zipCode: string) => {
     const url = "http://localhost:5000/sixer/";
-
+    setIsTyping(true);
     const prompt = message.map((messageObject) => {
       let role = messageObject.type === "user" ? "user" : "assistant";
       return {
@@ -137,13 +131,14 @@ const WhatGPT3: React.FC<MergedProps> = ({ zipCode }) => {
             message: response.data.bot.content,
           },
         ]);
-        // setIsLoading(false);
+        setIsTyping(false);
       })
       .catch((error) => {
         // setIsLoading(false);
         console.log(error);
       });
   };
+
   useEffect(() => {
     if (zipCode !== "" && !hasSentMessage) {
       const newMessage = {
@@ -203,13 +198,13 @@ const WhatGPT3: React.FC<MergedProps> = ({ zipCode }) => {
                   </div>
                 ))
               )}
-              {/* {isLoading && (
+              {isTyping && (
                 <div key={chatLog.length} className="flex justify-between">
                   <div className="rounded-lg p-4 text-white max-w-sm">
                     <TypingAnimation />
                   </div>
                 </div>
-              )} */}
+              )}
             </div>
             <div className="  p-4 rounded-lg absolute bottom-2 w-[50%] dark:bg-slate-700 dark:ring-0 dark:text-slate-300 dark:highlight-white/5 ">
               <form onSubmit={handleSubmit} className="flex  items-center">
