@@ -61,7 +61,7 @@ const WhatGPT3: React.FC<MergedProps> = ({ zipCode }) => {
     setInputValue("");
   };
   const sendMessage = async (message: ChatLogItem[]) => {
-    const url = "http://localhost:5000/sixer/";
+    const url = "https://chatbot4-m3bp.onrender.com/sixer";
 
     const prompt = message.map((messageObject) => {
       let role = messageObject.type === "user" ? "user" : "assistant";
