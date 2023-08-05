@@ -5,7 +5,6 @@ import "./App.css";
 
 const App = () => {
   const [zipCode, setZipCode] = useState("");
-  const [aipKey, setAPIKey] = useState("");
   const [chatVisible, setChatVisible] = useState(false);
 
   const handleZipCodeAndAPIKeySubmit = (zipCode: string) => {

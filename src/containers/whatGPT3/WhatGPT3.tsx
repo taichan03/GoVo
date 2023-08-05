@@ -22,7 +22,6 @@ const systemMessage = {
 
 interface WhatGPT3Props {
   zipCode: string;
-  onZipCodeAndAPIKeySubmit?: (zipCode: string) => void;
 }
 
 interface ChatLogItem {
@@ -30,24 +29,15 @@ interface ChatLogItem {
   message: string;
 }
 
-interface ChatDropDownProps {
-  showChat: boolean;
-  handleChat: () => void;
-}
+interface MergedProps extends WhatGPT3Props {}
 
-interface MergedProps extends ChatDropDownProps, WhatGPT3Props {}
-
-const WhatGPT3: React.FC<MergedProps> = ({
-  zipCode,
-  onZipCodeAndAPIKeySubmit,
-}) => {
+const WhatGPT3: React.FC<MergedProps> = ({ zipCode }) => {
   interface Message {
     message: string;
     sender: string;
     position?: "single" | "first" | "normal" | "last" | 0 | 1 | 2 | 3;
   }
 
-  const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [chatLog, setChatLog] = useState<ChatLogItem[]>([]); // Specify the type as ChatLogItem[]
   const [isTyping, setIsTyping] = useState(false);
@@ -109,16 +99,74 @@ const WhatGPT3: React.FC<MergedProps> = ({
         console.log(error);
       });
   };
+  const sendZipMessage = async (message: ChatLogItem[], zipCode: string) => {
+    const url = "http://localhost:5000/sixer/";
+
+    const prompt = message.map((messageObject) => {
+      let role = messageObject.type === "user" ? "user" : "assistant";
+      return {
+        role: role,
+        content: `Create a voting plan based on the following zip code, and list each candidate party affiliation: ${zipCode}`,
+      };
+    });
+    setChatLog((prevChatLog) => [
+      ...prevChatLog,
+      {
+        type: "user",
+        message: `Create a voting plan based on the following zip code, and list each candidate party affiliation: ${zipCode}`,
+      },
+    ]);
+    // const newMessages = [...chatLog, prompt];
+
+    // setChatLog(newMessages);
+    console.log(prompt);
+    const apiRequestBody = {
+      prompt: prompt,
+    };
+    console.log(apiRequestBody);
+    // setIsLoading(true);
+
+    axios
+      .post(url, apiRequestBody)
+      .then((response) => {
+        console.log(response);
+        setChatLog((prevChatLog) => [
+          ...prevChatLog,
+          {
+            type: "bot",
+            message: response.data.bot.content,
+          },
+        ]);
+        // setIsLoading(false);
+      })
+      .catch((error) => {
+        // setIsLoading(false);
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    if (zipCode !== "" && !hasSentMessage) {
+      const newMessage = {
+        message: inputValue,
+        type: "user",
+      };
+
+      const newMessages = [...chatLog, newMessage];
+
+      sendZipMessage(newMessages, zipCode);
+      hasSentMessage = true;
+    }
+  }, [zipCode, hasSentMessage]);
 
   return (
     <>
       <div className="flex flex-center justify-center items-center">
-        <div className=" w-[50%] h-[600px] bg-slate-800  border-1bg-white   focus:outline-none ring-2 ring-black shadow-sm rounded-lg text-slate-800">
+        <div className=" w-[50%] h-[680px] bg-slate-800  border-1bg-white   focus:outline-none ring-2 ring-black shadow-sm rounded-lg text-slate-800">
           <div
             id="chat_container"
             className=" overflow-auto mx-auto  flex flex-col h-full "
           >
-            <div className="flex flex-col space-y-2 pb-44 p-5 flex-grow">
+            <div className="flex flex-col space-y-1 mb-10 p-5 flex-grow">
               {chatLog.length === 0 ? (
                 <div className="custom-text">
                   Welcome to GoVo! <br />
@@ -148,7 +196,7 @@ const WhatGPT3: React.FC<MergedProps> = ({
                         message.type === "user"
                           ? "bg-blue-200 text-black "
                           : "text-black bg-gray-200 border-2 "
-                      }rounded-lg p-2 max-h-[100%] max-w-[500px]`}
+                      }rounded-lg p-2 max-h-[100%] max-w-[80%]`}
                     >
                       {message.message}
                     </div>
@@ -163,7 +211,7 @@ const WhatGPT3: React.FC<MergedProps> = ({
                 </div>
               )} */}
             </div>
-            <div className="  p-4 rounded-lg  dark:bg-slate-700 dark:ring-0 dark:text-slate-300 dark:highlight-white/5 ">
+            <div className="  p-4 rounded-lg absolute bottom-2 w-[50%] dark:bg-slate-700 dark:ring-0 dark:text-slate-300 dark:highlight-white/5 ">
               <form onSubmit={handleSubmit} className="flex  items-center">
                 <div className="flex-grow ml-2">
                   <input
