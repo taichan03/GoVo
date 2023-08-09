@@ -222,7 +222,7 @@ const WhatGPT3: React.FC<MergedProps> = ({ zipCode }) => {
                     type="submit"
                     className="  rounded-md  py-2.5 ring-1 ring-black bg-slate-900 px-3 py-1.5 text-sm font-semibold  text-slate-400 hover:bg-slate-800 "
                   >
-                    Send
+                    Sends
                   </button>
                 </div>
               </form>
